@@ -1,0 +1,4 @@
+/admin/* /admin/:splat 200
+/volunteer/* /volunteer/:splat 200
+/public/* /public/:splat 200
+/* /public/index.html 200
