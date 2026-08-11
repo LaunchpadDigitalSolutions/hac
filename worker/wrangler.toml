@@ -1,0 +1,13 @@
+name = "hac-worker"
+main = "index.js"
+compatibility_date = "2024-01-01"
+
+[vars]
+SUPABASE_URL = ""
+TWILIO_ACCOUNT_SID = ""
+TWILIO_AUTH_TOKEN = ""
+TWILIO_NUMBER = "+441429802051"
+
+# Secrets (set via: wrangler secret put SECRET_NAME)
+# SUPABASE_SERVICE_KEY
+# TWILIO_AUTH_TOKEN
