@@ -49,4 +49,9 @@ function toast(msg,ok){const t=document.getElementById('toast');if(!t)return;t.t
   document.getElementById('next-shift').innerHTML=`<div style="background:#2E7D52;border-radius:12px;overflow:hidden"><div style="padding:14px 16px"><div style="font-size:16px;font-weight:500;color:#fff">${next.name}</div><div style="font-size:13px;color:rgba(255,255,255,0.8);margin-top:4px">${next.date} &middot; ${next.location}</div></div></div>`;
 })();
 </script>
+<div style="position:fixed;bottom:64px;left:0;right:0;background:#1A1A1A;display:flex;z-index:200;border-top:1px solid #333">
+  <a href="https://hac.launchpadclient.app" style="flex:1;padding:7px 4px;text-align:center;font-size:10px;color:#9CA3AF;text-decoration:none;border-right:1px solid #333"><div style="font-size:14px">🌐</div>Public</a>
+  <a href="https://hac-admin.launchpadclient.app" style="flex:1;padding:7px 4px;text-align:center;font-size:10px;color:#9CA3AF;text-decoration:none;border-right:1px solid #333"><div style="font-size:14px">⚙️</div>Admin</a>
+  <a href="https://hac-volunteer.launchpadclient.app" style="flex:1;padding:7px 4px;text-align:center;font-size:10px;color:#9CA3AF;text-decoration:none"><div style="font-size:14px">🙋</div>Volunteer</a>
+</div>
 </body></html>
