@@ -1,1 +1,57 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>HAC — Coming soon</title></head><body><p>Coming soon</p></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#2E7D52">
+<title>Book an Event | Hartlepool Ambulance Charity</title>
+<link rel="stylesheet" href="../shared/hac.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body style="background:#fff">
+<div class="checker"></div>
+<div style="background:#2E7D52;padding:16px">
+  <a href="../index.html" style="color:rgba(255,255,255,0.8);font-size:13px;display:block;margin-bottom:8px">&#8592; Back</a>
+  <h1 style="font-size:20px;font-weight:500;color:#fff">Book a first aid event</h1>
+  <p style="font-size:13px;color:rgba(255,255,255,0.8);margin-top:4px">We cover schools, colleges, workplaces and community events across Hartlepool.</p>
+</div>
+<div style="padding:20px 16px">
+  <div id="success-msg" style="display:none;background:var(--gl);border:1px solid #2E7D52;border-radius:8px;padding:16px;margin-bottom:16px;color:#1D5235">
+    <strong>Request sent!</strong> Jason will be in touch within 2 working days to confirm your booking.
+  </div>
+  <form id="booking-form" style="display:flex;flex-direction:column;gap:14px">
+    <div class="form-group"><label class="form-label">Event name *</label><input class="form-input" id="f-name" placeholder="e.g. Annual First Aid Training Day" required></div>
+    <div class="form-group"><label class="form-label">Date requested *</label><input class="form-input" type="date" id="f-date" required></div>
+    <div class="form-group"><label class="form-label">Location / venue *</label><input class="form-input" id="f-location" placeholder="School name, address" required></div>
+    <div class="form-group"><label class="form-label">Expected number of attendees</label><input class="form-input" type="number" id="f-attendees" placeholder="50" min="1"></div>
+    <div class="form-group"><label class="form-label">Your name *</label><input class="form-input" id="f-contact" placeholder="Sarah Mitchell" required></div>
+    <div class="form-group"><label class="form-label">Phone number *</label><input class="form-input" type="tel" id="f-phone" placeholder="07700 900000" required></div>
+    <div class="form-group"><label class="form-label">Your email</label><input class="form-input" type="email" id="f-email" placeholder="s.mitchell@school.ac.uk"></div>
+    <div class="form-group"><label class="form-label">Anything else we should know?</label><textarea class="form-input" id="f-notes" rows="4" placeholder="Type of event, special requirements..."></textarea></div>
+    <button class="btn btn-primary" type="submit" id="submit-btn">Send request</button>
+  </form>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const supabase = window.supabase.createClient('https://zwndffsorkqsjykauepp.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp3bmRmZnNvcmtxc2p5a2F1ZXBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI1MzY4NDUsImV4cCI6MjA5ODExMjg0NX0.07KfE2A_sxEfGq1oPnEFvTihs0o54ZuTHG7DuMls7g0', {db:{schema:'hac'}});
+document.getElementById('booking-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn = document.getElementById('submit-btn');
+  btn.textContent = 'Sending...'; btn.disabled = true;
+  const { error } = await supabase.from('events').insert({
+    name: document.getElementById('f-name').value,
+    date: document.getElementById('f-date').value,
+    location: document.getElementById('f-location').value,
+    attendees: parseInt(document.getElementById('f-attendees').value)||null,
+    contact_name: document.getElementById('f-contact').value,
+    contact_phone: document.getElementById('f-phone').value,
+    submitted_by: document.getElementById('f-email').value,
+    notes: document.getElementById('f-notes').value,
+    status: 'pending'
+  });
+  if (error) { btn.textContent='Send request'; btn.disabled=false; alert('Error: '+error.message); return; }
+  document.getElementById('booking-form').style.display='none';
+  document.getElementById('success-msg').style.display='block';
+});
+</script>
+</body></html>
