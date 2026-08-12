@@ -42,4 +42,9 @@ function toast(msg,ok){const t=document.getElementById('toast');if(!t)return;t.t
   document.getElementById('call-list').innerHTML=list.length?list.map(c=>{const[pc,st,bg]=cfg[c.outcome]||cfg.answered;return`<div class="row"><div class="row-icon" style="background:${bg}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${st}" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 014.69 13a19.79 19.79 0 01-3.07-8.67A2 2 0 013.56 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div><div class="row-body"><div class="row-title">${c.caller_number}</div><div class="row-sub">${fmtTime(c.created_at)} &middot; ${fmtDuration(c.duration)}</div></div><span class="pill ${pc}">${c.outcome.charAt(0).toUpperCase()+c.outcome.slice(1)}</span></div>`;}).join(''):'<div class="empty">No calls yet</div>';
 })();
 </script>
+<div style="position:fixed;bottom:64px;left:0;right:0;background:#1A1A1A;display:flex;z-index:200;border-top:1px solid #333">
+  <a href="https://hac.launchpadclient.app" style="flex:1;padding:7px 4px;text-align:center;font-size:10px;color:#9CA3AF;text-decoration:none;border-right:1px solid #333"><div style="font-size:14px">🌐</div>Public</a>
+  <a href="https://hac-admin.launchpadclient.app" style="flex:1;padding:7px 4px;text-align:center;font-size:10px;color:#9CA3AF;text-decoration:none;border-right:1px solid #333"><div style="font-size:14px">⚙️</div>Admin</a>
+  <a href="https://hac-volunteer.launchpadclient.app" style="flex:1;padding:7px 4px;text-align:center;font-size:10px;color:#9CA3AF;text-decoration:none"><div style="font-size:14px">🙋</div>Volunteer</a>
+</div>
 </body></html>
