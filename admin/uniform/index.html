@@ -1,1 +1,134 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>HAC — Coming soon</title></head><body><p>Coming soon</p></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Kit requests — HAC Admin</title>
+<link rel="stylesheet" href="../../shared/hac.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+.tabs{display:flex;gap:8px;padding:12px 16px 0;overflow-x:auto}
+.tab{padding:7px 14px;border-radius:16px;font-size:13px;font-weight:500;background:#fff;border:0.5px solid var(--border);color:var(--muted);white-space:nowrap;cursor:pointer}
+.tab.on{background:var(--g);color:#fff;border-color:var(--g)}
+.card{background:#fff;border-radius:12px;margin:12px 16px;overflow:hidden;border:0.5px solid var(--border)}
+.ko-head{padding:14px 16px;display:flex;align-items:flex-start;gap:12px;border-bottom:0.5px solid var(--border)}
+.ko-name{font-size:15px;font-weight:500}
+.ko-meta{font-size:12px;color:var(--muted);margin-top:2px}
+.items{padding:10px 16px}
+.item{display:flex;justify-content:space-between;padding:6px 0;font-size:14px;color:#374151}
+.item .sz{color:var(--muted);font-size:13px}
+.notes{padding:0 16px 12px;font-size:13px;color:var(--muted);font-style:italic}
+.acts{display:flex;gap:8px;padding:12px 16px;border-top:0.5px solid var(--border)}
+.btn-sm{flex:1;padding:9px;border-radius:8px;font-size:13px;font-weight:500;border:0.5px solid var(--border);background:#fff;color:var(--text)}
+.btn-go{background:var(--g);color:#fff;border-color:var(--g)}
+.pill{padding:3px 9px;border-radius:10px;font-size:11px;font-weight:500;white-space:nowrap}
+.pill-amber{background:var(--warn-bg);color:var(--warn)}
+.pill-green{background:var(--gl);color:var(--gd)}
+.pill-gray{background:#F3F4F6;color:#6B7280}
+.empty{padding:40px 16px;text-align:center;color:var(--muted);font-size:14px}
+.sum{display:flex;gap:10px;padding:12px 16px 0}
+.sum>div{flex:1;background:#fff;border:0.5px solid var(--border);border-radius:12px;padding:12px;text-align:center}
+.sum .n{font-size:22px;font-weight:600;color:var(--g)}
+.sum .l{font-size:11px;color:var(--muted);margin-top:1px}
+</style>
+</head>
+<body>
+<div class="checker"></div>
+<header class="hac-header">
+  <img src="../../shared/hac-logo.jpg" alt="HAC">
+  <div><div class="title">Kit requests</div><div class="sub" id="sub">Uniform &amp; equipment</div></div>
+</header>
+
+<main class="main">
+  <div class="sum">
+    <div><div class="n" id="n-pending">0</div><div class="l">Pending</div></div>
+    <div><div class="n" id="n-approved">0</div><div class="l">Approved</div></div>
+    <div><div class="n" id="n-fulfilled">0</div><div class="l">Fulfilled</div></div>
+  </div>
+  <div class="tabs">
+    <div class="tab on" data-f="pending">Pending</div>
+    <div class="tab" data-f="approved">Approved</div>
+    <div class="tab" data-f="fulfilled">Fulfilled</div>
+    <div class="tab" data-f="all">All</div>
+  </div>
+  <div id="list"></div>
+</main>
+
+<nav class="bot-nav">
+  <a href="../index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home</a>
+  <a href="../events/index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Events</a>
+  <a href="../volunteers/index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>Volunteers</a>
+  <a href="../uniform/index.html" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>Kit</a>
+  <a href="../settings/index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>Settings</a>
+</nav>
+<div id="toast" class="toast"></div>
+
+<script src="../../shared/auth.js"></script>
+<script>
+let ALL=[], FILTER='pending';
+
+function itemsHtml(items){
+  let arr=items;
+  if(typeof arr==='string'){try{arr=JSON.parse(arr)}catch(e){arr=[]}}
+  if(!Array.isArray(arr)||!arr.length) return '<div class="item"><span style="color:var(--muted)">No items listed</span></div>';
+  return arr.map(i=>`<div class="item"><span>${i.qty>1?i.qty+' &times; ':''}${i.item||'Item'}</span><span class="sz">${i.size&&i.size!=='-'?'Size '+i.size:''}</span></div>`).join('');
+}
+
+function pill(s){
+  if(s==='pending') return '<span class="pill pill-amber">Pending</span>';
+  if(s==='approved') return '<span class="pill pill-green">Approved</span>';
+  if(s==='fulfilled') return '<span class="pill pill-gray">Fulfilled</span>';
+  return `<span class="pill pill-gray">${s||'—'}</span>`;
+}
+
+function render(){
+  const rows = FILTER==='all' ? ALL : ALL.filter(k=>k.status===FILTER);
+  const el=document.getElementById('list');
+  if(!rows.length){el.innerHTML='<div class="empty">No '+(FILTER==='all'?'':FILTER+' ')+'kit requests</div>';return;}
+  el.innerHTML=rows.map(k=>`
+    <div class="card">
+      <div class="ko-head">
+        <div style="flex:1">
+          <div class="ko-name">${k.vname||'Unknown volunteer'}</div>
+          <div class="ko-meta">Requested ${fmtDate(k.created_at)}</div>
+        </div>
+        ${pill(k.status)}
+      </div>
+      <div class="items">${itemsHtml(k.items)}</div>
+      ${k.notes?`<div class="notes">&ldquo;${k.notes}&rdquo;</div>`:''}
+      ${k.status!=='fulfilled'?`<div class="acts">
+        ${k.status==='pending'?`<button class="btn-sm btn-go" onclick="setStatus('${k.id}','approved')">Approve</button>`:''}
+        ${k.status==='approved'?`<button class="btn-sm btn-go" onclick="setStatus('${k.id}','fulfilled')">Mark fulfilled</button>`:''}
+        <button class="btn-sm" onclick="setStatus('${k.id}','declined')">Decline</button>
+      </div>`:''}
+    </div>`).join('');
+}
+
+async function setStatus(id,status){
+  const{error}=await supabase.from('kit_orders').update({status,updated_at:new Date().toISOString()}).eq('id',id);
+  if(error){toast(error.message,false);return;}
+  toast(status==='approved'?'Approved':status==='fulfilled'?'Marked fulfilled':'Declined',true);
+  await load();
+}
+
+async function load(){
+  const{data:orders,error}=await supabase.from('kit_orders').select('*').order('created_at',{ascending:false});
+  if(error){toast(error.message,false);return;}
+  const{data:vols}=await supabase.from('volunteers').select('id,name');
+  const map={}; (vols||[]).forEach(v=>map[v.id]=v.name);
+  ALL=(orders||[]).map(o=>({...o,vname:map[o.volunteer_id]}));
+  document.getElementById('n-pending').textContent=ALL.filter(k=>k.status==='pending').length;
+  document.getElementById('n-approved').textContent=ALL.filter(k=>k.status==='approved').length;
+  document.getElementById('n-fulfilled').textContent=ALL.filter(k=>k.status==='fulfilled').length;
+  render();
+}
+
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));
+  t.classList.add('on'); FILTER=t.dataset.f; render();
+}));
+
+(async()=>{ const p=await requireAdmin(); if(!p)return; document.getElementById('sub').textContent=p.name; await load(); })();
+</script>
+</body>
+</html>
