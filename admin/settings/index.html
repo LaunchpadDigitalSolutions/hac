@@ -2,156 +2,258 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#2E7D52">
-<title>Settings | HAC</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Settings — HAC Admin</title>
+<link rel="stylesheet" href="../../shared/hac.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root {
-  --g: #2E7D52;
-  --gl: #E8F2EC;
-  --gd: #1D5235;
-  --yellow: #F5CB00;
-  --blue: #1565C0;
-  --white: #FFFFFF;
-  --bg: #F2F5F2;
-  --border: #D8E8D8;
-  --text: #1A1A1A;
-  --muted: #6B7280;
-  --danger: #B91C1C;
-  --danger-bg: #FEE2E2;
-  --warn-bg: #FEF3C7;
-  --warn: #B45309;
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html{-webkit-text-size-adjust:100%}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:16px;background:var(--bg);color:var(--text);overscroll-behavior:none;overflow-x:hidden}
-a{color:inherit;text-decoration:none}
-button{font-family:inherit;cursor:pointer}
-input,select,textarea{font-family:inherit;font-size:16px}
-
-/* Checker band */
-.checker{height:20px;background-image:conic-gradient(var(--g) 90deg,var(--yellow) 90deg 180deg,var(--g) 180deg 270deg,var(--yellow) 270deg);background-size:20px 20px}
-
-/* Header */
-.hac-header{background:var(--g);color:#fff;padding:14px 16px;display:flex;align-items:center;gap:12px}
-.hac-header img{width:36px;height:36px;border-radius:18px;background:#fff;object-fit:contain}
-.hac-header .title{font-size:17px;font-weight:500}
-.hac-header .sub{font-size:12px;color:rgba(255,255,255,0.75);margin-top:1px}
-.hac-header-right{margin-left:auto;display:flex;align-items:center;gap:12px}
-
-/* Bottom nav */
-.bot-nav{position:fixed;bottom:0;left:0;right:0;height:64px;background:#fff;border-top:0.5px solid var(--border);display:flex;padding-bottom:env(safe-area-inset-bottom);z-index:100}
-.bot-nav a{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:10px;color:var(--muted);border:none;background:none;text-decoration:none}
-.bot-nav a.active{color:var(--g);font-weight:500}
-.bot-nav a svg{width:22px;height:22px}
-.main{padding:0 0 72px}
-
-/* Cards */
-.card{background:#fff;border-radius:12px;border:0.5px solid var(--border);overflow:hidden;margin:0 16px 12px}
-.card-header{padding:12px 16px;border-bottom:0.5px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between}
-.card-header h3{font-size:14px;font-weight:500}
-
-/* Rows */
-.row{padding:14px 16px;display:flex;align-items:center;gap:12px;border-bottom:0.5px solid #f5f5f5}
+.card{background:#fff;border-radius:12px;margin:12px 16px;overflow:hidden;border:0.5px solid var(--border)}
+.card-header{padding:13px 16px;border-bottom:0.5px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.card-header h3{font-size:14px;font-weight:600;color:var(--text)}
+.row{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:0.5px solid #F0F0F0;text-decoration:none;color:inherit}
 .row:last-child{border-bottom:none}
-.row-icon{width:38px;height:38px;border-radius:19px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .row-body{flex:1;min-width:0}
-.row-title{font-size:14px;font-weight:500}
-.row-sub{font-size:12px;color:var(--muted);margin-top:2px}
-
-/* Pills */
-.pill{font-size:11px;padding:3px 9px;border-radius:99px;font-weight:500;white-space:nowrap}
-.pill-green{background:var(--gl);color:var(--g)}
-.pill-warn{background:var(--warn-bg);color:var(--warn)}
-.pill-danger{background:var(--danger-bg);color:var(--danger)}
-.pill-gray{background:#F5F5F5;color:var(--muted)}
-.pill-blue{background:#DBEAFE;color:#1D4ED8}
-
-/* Stat strip */
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:14px 16px}
-.stat{background:#fff;border-radius:12px;border:0.5px solid var(--border);padding:12px 8px;text-align:center}
-.stat-num{font-size:26px;font-weight:500;color:var(--g)}
-.stat-label{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.3}
-
-/* Buttons */
-.btn{display:block;width:100%;padding:14px;border-radius:8px;font-size:15px;font-weight:500;border:none;text-align:center}
-.btn-primary{background:var(--g);color:#fff}
-.btn-danger{background:#fff;color:var(--danger);border:0.5px solid #FCA5A5}
-.btn-ghost{background:#fff;color:var(--text);border:0.5px solid var(--border)}
-
-/* Forms */
-.form-group{margin-bottom:14px}
+.row-title{font-size:15px;font-weight:500}
+.row-sub{font-size:12px;color:var(--muted);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chev{color:#C7C7CC;font-size:18px}
+.btn-link{background:none;border:none;color:var(--g);font-size:13px;font-weight:500;padding:0}
+.pill{padding:3px 9px;border-radius:10px;font-size:11px;font-weight:500}
+.pill-blue{background:#E3F0FB;color:var(--blue)}
+.pill-green{background:var(--gl);color:var(--gd)}
+.pill-gray{background:#F3F4F6;color:#6B7280}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,0.45);display:none;align-items:flex-end;z-index:400}
+.modal.open{display:flex}
+.sheet{background:#fff;width:100%;border-radius:16px 16px 0 0;padding:20px 16px calc(20px + env(safe-area-inset-bottom));max-height:88vh;overflow:auto}
+.sheet h3{font-size:17px;font-weight:600;margin-bottom:4px}
+.sheet p.hint{font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.5}
+.form-group{margin-bottom:13px}
 .form-label{font-size:13px;font-weight:500;color:var(--muted);display:block;margin-bottom:5px}
 .form-input{width:100%;padding:11px 13px;border:0.5px solid var(--border);border-radius:8px;font-size:16px;background:#fff;color:var(--text)}
 .form-input:focus{outline:none;border-color:var(--g)}
-
-/* Section head */
-.section-head{padding:8px 16px 4px;font-size:12px;font-weight:500;color:var(--muted);letter-spacing:0.03em;background:var(--bg)}
-
-/* Login page */
-.login-wrap{min-height:100vh;display:flex;flex-direction:column}
-.login-body{flex:1;padding:24px 20px;display:flex;flex-direction:column;justify-content:center;max-width:400px;margin:0 auto;width:100%}
-.login-logo{text-align:center;margin-bottom:28px}
-.login-logo img{width:80px;height:80px}
-.login-title{font-size:22px;font-weight:500;margin-bottom:4px;text-align:center}
-.login-sub{font-size:14px;color:var(--muted);text-align:center;margin-bottom:28px}
-
-/* Toast */
-.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#1A1A1A;color:#fff;padding:10px 18px;border-radius:8px;font-size:14px;z-index:999;display:none}
-
-/* Empty state */
-.empty{padding:40px 16px;text-align:center;color:var(--muted);font-size:14px}
-
-/* Page header (green) */
-.page-head{background:var(--g);padding:14px 16px}
-.page-head h2{color:#fff;font-size:20px;font-weight:500}
-.page-head p{color:rgba(255,255,255,0.75);font-size:13px;margin-top:2px}
-
-/* Modal */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:200;display:none;align-items:flex-end}
-.modal-overlay.open{display:flex}
-.modal{background:#fff;border-radius:16px 16px 0 0;width:100%;padding:20px 20px 32px;max-height:90vh;overflow-y:auto}
-.modal-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 16px}
-.modal h3{font-size:17px;font-weight:500;margin-bottom:16px}
-
-@media(min-width:768px){
-  .bot-nav{display:none}
-  .main{padding:0}
-  .login-body{padding:40px}
-}
-
+.btn{width:100%;padding:13px;border-radius:9px;font-size:15px;font-weight:500;border:none;margin-top:4px}
+.btn-primary{background:var(--g);color:#fff}
+.btn-ghost{background:#F3F4F6;color:var(--text);margin-top:8px}
+.status{padding:10px 16px;margin:0 16px 12px;border-radius:9px;font-size:13px;line-height:1.5;display:none}
+.status.warn{background:var(--warn-bg);color:var(--warn);display:block}
+.status.ok{background:var(--gl);color:var(--gd);display:block}
 </style>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-<div style="height:20px;background-image:conic-gradient(#2E7D52 90deg,#F5CB00 90deg 180deg,#2E7D52 180deg 270deg,#F5CB00 270deg);background-size:20px 20px"></div>
+<div class="checker"></div>
 <header class="hac-header">
   <img src="../../shared/hac-logo.jpg" alt="HAC">
-  <div><div class="title">Settings</div></div>
+  <div><div class="title">Settings</div><div class="sub" id="sub">&nbsp;</div></div>
 </header>
-<main class="main" style="padding-top:16px">
+
+<main class="main" style="padding-top:4px">
+
   <div class="card">
     <div class="card-header"><h3>Account</h3></div>
-    <div class="row"><div class="row-body"><div class="row-title">Jason Anderson</div><div class="row-sub">Admin &middot; Hartlepool Ambulance Charity</div></div></div>
+    <div class="row">
+      <div class="row-body">
+        <div class="row-title" id="me-name">&mdash;</div>
+        <div class="row-sub" id="me-sub">Hartlepool Ambulance Charity</div>
+      </div>
+      <span class="pill pill-blue">Admin</span>
+    </div>
+    <div class="row" style="cursor:pointer" onclick="openMyPassword()">
+      <div class="row-body"><div class="row-title">Change my password</div></div>
+      <span class="chev">&#8250;</span>
+    </div>
   </div>
+
+  <div id="worker-status" class="status"></div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>People</h3>
+      <button class="btn-link" onclick="openAdd()">+ Add</button>
+    </div>
+    <div id="people"></div>
+  </div>
+
   <div class="card">
     <div class="card-header"><h3>System</h3></div>
-    <a class="row" href="../calls/index.html"><div class="row-body"><div class="row-title">Call log</div></div></a>
-    <a class="row" href="../voicemails/index.html"><div class="row-body"><div class="row-title">Voicemails</div></div></a>
-    <a class="row" href="../sms/index.html"><div class="row-body"><div class="row-title">SMS log</div></div></a>
+    <a class="row" href="../calls/index.html"><div class="row-body"><div class="row-title">Call log</div><div class="row-sub" id="c-calls">&mdash;</div></div><span class="chev">&#8250;</span></a>
+    <a class="row" href="../voicemails/index.html"><div class="row-body"><div class="row-title">Voicemails</div><div class="row-sub" id="c-vm">&mdash;</div></div><span class="chev">&#8250;</span></a>
+    <a class="row" href="../sms/index.html"><div class="row-body"><div class="row-title">SMS log</div><div class="row-sub" id="c-sms">&mdash;</div></div><span class="chev">&#8250;</span></a>
+    <a class="row" href="../uniform/index.html"><div class="row-body"><div class="row-title">Kit requests</div><div class="row-sub" id="c-kit">&mdash;</div></div><span class="chev">&#8250;</span></a>
   </div>
-  <p style="text-align:center;font-size:12px;color:var(--muted);padding:16px">Hartlepool Ambulance Charity &middot; No. 1178331<br>Built by Launchpad Digital Solutions</p>
+
+  <div class="card">
+    <div class="card-header"><h3>Session</h3></div>
+    <div class="row" style="cursor:pointer" onclick="hacSignOut('../login/index.html')">
+      <div class="row-body"><div class="row-title" style="color:var(--danger)">Sign out</div></div>
+    </div>
+  </div>
+
+  <p style="text-align:center;font-size:12px;color:var(--muted);padding:8px 16px 20px;line-height:1.6">
+    Hartlepool Ambulance Charity &middot; No. 1178331<br>Built by Launchpad Digital Solutions
+  </p>
 </main>
-<nav class="bot-nav">
-  <a href="../index.html" class=""><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home</a>
-  <a href="../events/index.html" class=""><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Events</a>
-  <a href="../volunteers/index.html" class=""><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>Volunteers</a>
-  <a href="../calls/index.html" class=""><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 014.69 13a19.79 19.79 0 01-3.07-8.67A2 2 0 013.56 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>Calls</a>
-  <a href="../settings/index.html" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>Settings</a>
-</nav>
-<div style="position:fixed;bottom:64px;left:0;right:0;background:#1A1A1A;display:flex;z-index:200;border-top:1px solid #333">
-  <a href="https://hac.launchpadclient.app" style="flex:1;padding:7px 4px;text-align:center;font-size:10px;color:#9CA3AF;text-decoration:none;border-right:1px solid #333"><div style="font-size:14px">🌐</div>Public</a>
-  <a href="https://hac-admin.launchpadclient.app" style="flex:1;padding:7px 4px;text-align:center;font-size:10px;color:#9CA3AF;text-decoration:none;border-right:1px solid #333"><div style="font-size:14px">⚙️</div>Admin</a>
-  <a href="https://hac-volunteer.launchpadclient.app" style="flex:1;padding:7px 4px;text-align:center;font-size:10px;color:#9CA3AF;text-decoration:none"><div style="font-size:14px">🙋</div>Volunteer</a>
+
+<!-- Add person -->
+<div class="modal" id="add-modal">
+  <div class="sheet">
+    <h3>Add person</h3>
+    <p class="hint">Creates a sign-in account and a volunteer record. They sign in with the username below.</p>
+    <div class="form-group"><label class="form-label">Full name</label><input class="form-input" id="a-name" placeholder="Sarah Mills"></div>
+    <div class="form-group"><label class="form-label">Username</label><input class="form-input" id="a-user" placeholder="sarah.mills" autocapitalize="none"></div>
+    <div class="form-group"><label class="form-label">Phone</label><input class="form-input" id="a-phone" placeholder="07700 900000" inputmode="tel"></div>
+    <div class="form-group"><label class="form-label">Qualification</label>
+      <select class="form-input" id="a-qual">
+        <option>FREC 3</option><option>FREC 4</option><option>First Aid at Work</option>
+        <option>First aider</option><option>In training</option>
+      </select>
+    </div>
+    <div class="form-group"><label class="form-label">Role</label>
+      <select class="form-input" id="a-role"><option value="volunteer">Volunteer</option><option value="admin">Admin</option></select>
+    </div>
+    <div class="form-group"><label class="form-label">Temporary password</label><input class="form-input" id="a-pass" placeholder="At least 8 characters"></div>
+    <button class="btn btn-primary" id="a-go" onclick="addPerson()">Create account</button>
+    <button class="btn btn-ghost" onclick="closeAll()">Cancel</button>
+  </div>
 </div>
-</body></html>
+
+<!-- Reset password -->
+<div class="modal" id="reset-modal">
+  <div class="sheet">
+    <h3>Reset password</h3>
+    <p class="hint" id="r-who"></p>
+    <div class="form-group"><label class="form-label">New password</label><input class="form-input" id="r-pass" placeholder="At least 8 characters"></div>
+    <button class="btn btn-primary" id="r-go" onclick="doReset()">Set password</button>
+    <button class="btn btn-ghost" onclick="closeAll()">Cancel</button>
+  </div>
+</div>
+
+<nav class="bot-nav">
+  <a href="../index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home</a>
+  <a href="../events/index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Events</a>
+  <a href="../volunteers/index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>Volunteers</a>
+  <a href="../uniform/index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>Kit</a>
+  <a href="../settings/index.html" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>Settings</a>
+</nav>
+<div id="toast" class="toast"></div>
+
+<script src="../../shared/auth.js"></script>
+<script>
+const HAC_WORKER='https://worker.hac.launchpadclient.app';
+let RESET_TARGET=null, WORKER_UP=false;
+
+function closeAll(){document.querySelectorAll('.modal').forEach(m=>m.classList.remove('open'));}
+function openAdd(){
+  if(!WORKER_UP){toast('Account service unavailable — see the notice above',false);return;}
+  closeAll();document.getElementById('add-modal').classList.add('open');
+}
+function openReset(id,name){
+  if(!WORKER_UP){toast('Account service unavailable — see the notice above',false);return;}
+  RESET_TARGET={id,name};
+  document.getElementById('r-who').textContent='Setting a new password for '+name+'. Tell them what it is and ask them to change it.';
+  document.getElementById('r-pass').value='';
+  closeAll();document.getElementById('reset-modal').classList.add('open');
+}
+function openMyPassword(){
+  const p=prompt('Enter a new password for your own account (at least 8 characters):');
+  if(!p)return;
+  if(p.length<8){toast('Password must be at least 8 characters',false);return;}
+  supabase.auth.updateUser({password:p}).then(({error})=>{
+    toast(error?error.message:'Password changed',!error);
+  });
+}
+
+async function token(){
+  const{data:{session}}=await supabase.auth.getSession();
+  return session?session.access_token:null;
+}
+
+async function addPerson(){
+  const name=document.getElementById('a-name').value.trim();
+  const user=document.getElementById('a-user').value.trim().toLowerCase();
+  const pass=document.getElementById('a-pass').value.trim();
+  if(!name||!user||!pass){toast('Name, username and password are required',false);return;}
+  if(pass.length<8){toast('Password must be at least 8 characters',false);return;}
+  const btn=document.getElementById('a-go');btn.disabled=true;btn.textContent='Creating…';
+  const t=await token();
+  const r=await fetch(HAC_WORKER+'/api/users',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'Bearer '+t},
+    body:JSON.stringify({username:user,name,password:pass,
+      phone:document.getElementById('a-phone').value.trim(),
+      qualification:document.getElementById('a-qual').value,
+      role:document.getElementById('a-role').value})
+  }).catch(()=>null);
+  btn.disabled=false;btn.textContent='Create account';
+  if(!r){toast('Could not reach the account service',false);return;}
+  const out=await r.json().catch(()=>({error:'Unexpected response'}));
+  if(!r.ok){toast(out.error||'Could not create account',false);return;}
+  toast(name+' added — username '+user,true);
+  closeAll();
+  ['a-name','a-user','a-phone','a-pass'].forEach(i=>document.getElementById(i).value='');
+  loadPeople();
+}
+
+async function doReset(){
+  const pass=document.getElementById('r-pass').value.trim();
+  if(pass.length<8){toast('Password must be at least 8 characters',false);return;}
+  const btn=document.getElementById('r-go');btn.disabled=true;btn.textContent='Setting…';
+  const t=await token();
+  const r=await fetch(HAC_WORKER+'/api/users/reset',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'Bearer '+t},
+    body:JSON.stringify({user_id:RESET_TARGET.id,password:pass})
+  }).catch(()=>null);
+  btn.disabled=false;btn.textContent='Set password';
+  if(!r){toast('Could not reach the account service',false);return;}
+  const out=await r.json().catch(()=>({error:'Unexpected response'}));
+  if(!r.ok){toast(out.error||'Could not reset password',false);return;}
+  toast('Password updated for '+RESET_TARGET.name,true);
+  closeAll();
+}
+
+async function loadPeople(){
+  const{data:vols}=await supabase.from('volunteers').select('*').order('role').order('name');
+  const list=vols||[];
+  document.getElementById('people').innerHTML=list.length?list.map(v=>`
+    <div class="row">
+      <div class="row-body">
+        <div class="row-title">${v.name} ${v.role==='admin'?'<span class="pill pill-blue">Admin</span>':''}</div>
+        <div class="row-sub">${(v.email||'').replace('@hac.internal','')} &middot; ${v.qualification||'—'}${v.user_id?'':' &middot; no sign-in'}</div>
+      </div>
+      ${v.user_id?`<button class="btn-link" onclick="openReset('${v.user_id}','${v.name.replace(/'/g,"\\'")}')">Reset</button>`:'<span class="pill pill-gray">No login</span>'}
+    </div>`).join(''):'<div style="padding:24px;text-align:center;color:var(--muted);font-size:14px">No people yet</div>';
+}
+
+async function loadCounts(){
+  const q=async t=>{const{count}=await supabase.from(t).select('*',{count:'exact',head:true});return count||0;};
+  const [c,v,s,k]=await Promise.all([q('calls'),q('voicemails'),q('sms_log'),q('kit_orders')]);
+  document.getElementById('c-calls').textContent=c+' logged';
+  document.getElementById('c-vm').textContent=v+' recorded';
+  document.getElementById('c-sms').textContent=s+' sent';
+  const{data:pend}=await supabase.from('kit_orders').select('id').eq('status','pending');
+  document.getElementById('c-kit').textContent=k+' total · '+((pend||[]).length)+' pending';
+}
+
+async function checkWorker(){
+  const el=document.getElementById('worker-status');
+  try{
+    const r=await fetch(HAC_WORKER+'/health',{cache:'no-store'});
+    if(!r.ok) throw new Error();
+    WORKER_UP=true;
+  }catch(e){
+    WORKER_UP=false;
+    el.className='status warn';
+    el.innerHTML='<strong>Account service offline.</strong> Adding people and resetting passwords are unavailable until the HAC worker is deployed. Everything else works normally.';
+  }
+}
+
+(async()=>{
+  const p=await requireAdmin(); if(!p) return;
+  document.getElementById('sub').textContent=p.name;
+  document.getElementById('me-name').textContent=p.name;
+  document.getElementById('me-sub').textContent=(p.email||'').replace('@hac.internal','')+' · Hartlepool Ambulance Charity';
+  await checkWorker();
+  await Promise.all([loadPeople(),loadCounts()]);
+})();
+</script>
+</body>
+</html>
