@@ -1,13 +1,20 @@
 name = "hac-worker"
 main = "index.js"
-compatibility_date = "2024-01-01"
+compatibility_date = "2024-09-23"
 
 [vars]
-SUPABASE_URL = ""
+SUPABASE_URL = "https://zwndffsorkqsjykauepp.supabase.co"
 TWILIO_ACCOUNT_SID = ""
-TWILIO_AUTH_TOKEN = ""
 TWILIO_NUMBER = "+441429802051"
 
-# Secrets (set via: wrangler secret put SECRET_NAME)
-# SUPABASE_SERVICE_KEY
-# TWILIO_AUTH_TOKEN
+# Secrets — set these before deploying, never commit them:
+#   wrangler secret put SUPABASE_SERVICE_KEY
+#   wrangler secret put TWILIO_AUTH_TOKEN
+#
+# TWILIO_ACCOUNT_SID above is not secret but must be filled in.
+#
+# Twilio console configuration for +44 1429 802051:
+#   A call comes in        → POST https://worker.hac.launchpadclient.app/webhook/twilio
+#   Call status changes    → POST https://worker.hac.launchpadclient.app/webhook/twilio/status
+#
+# Health check: GET https://worker.hac.launchpadclient.app/health
