@@ -157,6 +157,9 @@ input,select,textarea{font-family:inherit;font-size:16px}
 </nav>
 <div class="toast" id="toast"></div>
 <script>const supabase = window.supabase.createClient('https://zwndffsorkqsjykauepp.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp3bmRmZnNvcmtxc2p5a2F1ZXBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI1MzY4NDUsImV4cCI6MjA5ODExMjg0NX0.07KfE2A_sxEfGq1oPnEFvTihs0o54ZuTHG7DuMls7g0', {db:{schema:'hac'}});
+/* HAC_GUARD */
+(async()=>{const{data:{user}}=await supabase.auth.getUser();if(!user){window.location.replace('../login/index.html');return;}const{data:me}=await supabase.from('volunteers').select('role').eq('user_id',user.id).maybeSingle();if(!me||me.role!=='admin'){await supabase.auth.signOut();window.location.replace('../login/index.html');}})();
+
 function fmtTime(d){if(!d)return'';return new Date(d).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});}
 function fmtDate(d){if(!d)return'';return new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});}
 function fmtDuration(s){if(!s)return'0:00';const m=Math.floor(s/60),r=s%60;return m+':'+(r<10?'0':'')+r;}
