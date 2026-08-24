@@ -145,7 +145,9 @@ function fmtDate(d){if(!d)return'';return new Date(d).toLocaleDateString('en-GB'
 function fmtDuration(s){if(!s)return'0:00';const m=Math.floor(s/60),r=s%60;return m+':'+(r<10?'0':'')+r;}
 function toast(msg,ok){const t=document.getElementById('toast');if(!t)return;t.textContent=msg;t.style.background=ok===false?'#B91C1C':'#1A1A1A';t.style.display='block';setTimeout(()=>t.style.display='none',3000);}
 (async()=>{
-  const{data:vols}=await supabase.from('volunteers').select('id').eq('name','Tom Bradley').limit(1);
+  const{data:{user}}=await supabase.auth.getUser();
+  if(!user){window.location.href='../login/index.html';return;}
+  const{data:vols}=await supabase.from('volunteers').select('id').eq('user_id',user.id).limit(1);
   const vol=vols&&vols[0];
   if(!vol){document.getElementById('rota-count').textContent='0 shifts';document.getElementById('rota-list').innerHTML='<div class="empty">No shifts</div>';return;}
   const{data:asgn}=await supabase.from('event_assignments').select('event_id').eq('volunteer_id',vol.id);
