@@ -156,9 +156,11 @@ function pick(item,size){if(sel[item]===size)delete sel[item];else sel[item]=siz
 async function submitKit(){
   const kitItems=Object.entries(sel).map(([item,size])=>({item,size}));
   if(!kitItems.length){toast('Select at least one item',false);return;}
-  const{data:vols}=await supabase.from('volunteers').select('id').eq('name','Tom Bradley').limit(1);
+  const{data:{user}}=await supabase.auth.getUser();
+  if(!user){window.location.href='../login/index.html';return;}
+  const{data:vols}=await supabase.from('volunteers').select('id').eq('user_id',user.id).limit(1);
   const vid=vols&&vols[0]&&vols[0].id;
-  if(!vid){toast('Demo: add a volunteer named Tom Bradley first',false);return;}
+  if(!vid){toast('Your volunteer record could not be found. Contact an admin.',false);return;}
   await supabase.from('kit_orders').insert({volunteer_id:vid,items:kitItems,notes:document.getElementById('kit-notes').value,status:'pending'});
   toast('Kit request submitted!',true);Object.keys(sel).forEach(k=>delete sel[k]);render();
 }
