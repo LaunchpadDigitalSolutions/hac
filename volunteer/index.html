@@ -151,9 +151,11 @@ function fmtDate(d){if(!d)return'';return new Date(d).toLocaleDateString('en-GB'
 function fmtDuration(s){if(!s)return'0:00';const m=Math.floor(s/60),r=s%60;return m+':'+(r<10?'0':'')+r;}
 function toast(msg,ok){const t=document.getElementById('toast');if(!t)return;t.textContent=msg;t.style.background=ok===false?'#B91C1C':'#1A1A1A';t.style.display='block';setTimeout(()=>t.style.display='none',3000);}
 (async()=>{
-  const DEMO_VOL_NAME='Tom Bradley';
-  const{data:vols}=await supabase.from('volunteers').select('id').eq('name',DEMO_VOL_NAME).limit(1);
+  const{data:{user}}=await supabase.auth.getUser();
+  if(!user){window.location.href='login/index.html';return;}
+  const{data:vols}=await supabase.from('volunteers').select('id,name').eq('user_id',user.id).limit(1);
   const vol=vols&&vols[0];
+  if(vol){const h=document.querySelector('.hac-header .sub');if(h)h.textContent=vol.name;}
   if(!vol){document.getElementById('next-shift').innerHTML='<div style="background:#f5f5f5;border-radius:12px;padding:16px;text-align:center;color:var(--muted);font-size:14px">No upcoming shifts</div>';return;}
   const{data:asgn}=await supabase.from('event_assignments').select('event_id').eq('volunteer_id',vol.id);
   const ids=(asgn||[]).map(a=>a.event_id);
