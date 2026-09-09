@@ -107,7 +107,7 @@ input,select,textarea{font-family:inherit;font-size:16px}
 .modal h3{font-size:17px;font-weight:500;margin-bottom:16px}
 
 @media(min-width:768px){
-  .bot-nav{display:none}
+  
   .main{padding:0}
   .login-body{padding:40px}
 }
