@@ -105,16 +105,16 @@ function render(){
 }
 
 async function setStatus(id,status){
-  const{error}=await supabase.from('kit_orders').update({status,updated_at:new Date().toISOString()}).eq('id',id);
+  const{error}=await sb.from('kit_orders').update({status,updated_at:new Date().toISOString()}).eq('id',id);
   if(error){toast(error.message,false);return;}
   toast(status==='approved'?'Approved':status==='fulfilled'?'Marked fulfilled':'Declined',true);
   await load();
 }
 
 async function load(){
-  const{data:orders,error}=await supabase.from('kit_orders').select('*').order('created_at',{ascending:false});
+  const{data:orders,error}=await sb.from('kit_orders').select('*').order('created_at',{ascending:false});
   if(error){toast(error.message,false);return;}
-  const{data:vols}=await supabase.from('volunteers').select('id,name');
+  const{data:vols}=await sb.from('volunteers').select('id,name');
   const map={}; (vols||[]).forEach(v=>map[v.id]=v.name);
   ALL=(orders||[]).map(o=>({...o,vname:map[o.volunteer_id]}));
   document.getElementById('n-pending').textContent=ALL.filter(k=>k.status==='pending').length;

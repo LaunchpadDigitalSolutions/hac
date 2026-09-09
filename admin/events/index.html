@@ -156,9 +156,9 @@ input,select,textarea{font-family:inherit;font-size:16px}
   <a href="../settings/index.html" class=""><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>Settings</a>
 </nav>
 <div class="toast" id="toast"></div>
-<script>const supabase = window.supabase.createClient('https://zwndffsorkqsjykauepp.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp3bmRmZnNvcmtxc2p5a2F1ZXBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI1MzY4NDUsImV4cCI6MjA5ODExMjg0NX0.07KfE2A_sxEfGq1oPnEFvTihs0o54ZuTHG7DuMls7g0', {db:{schema:'hac'}});
+<script>const sb = window.supabase.createClient('https://zwndffsorkqsjykauepp.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp3bmRmZnNvcmtxc2p5a2F1ZXBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI1MzY4NDUsImV4cCI6MjA5ODExMjg0NX0.07KfE2A_sxEfGq1oPnEFvTihs0o54ZuTHG7DuMls7g0', {db:{schema:'hac'}});
 /* HAC_GUARD */
-(async()=>{const{data:{user}}=await supabase.auth.getUser();if(!user){window.location.replace('../login/index.html');return;}const{data:me}=await supabase.from('volunteers').select('role').eq('user_id',user.id).maybeSingle();if(!me||me.role!=='admin'){await supabase.auth.signOut();window.location.replace('../login/index.html');}})();
+(async()=>{const{data:{user}}=await sb.auth.getUser();if(!user){window.location.replace('../login/index.html');return;}const{data:me}=await sb.from('volunteers').select('role').eq('user_id',user.id).maybeSingle();if(!me||me.role!=='admin'){await sb.auth.signOut();window.location.replace('../login/index.html');}})();
 
 function fmtTime(d){if(!d)return'';return new Date(d).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});}
 function fmtDate(d){if(!d)return'';return new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});}
@@ -169,7 +169,7 @@ let curId=null,selVols=new Set(),allVols=[];
 async function loadList(){
   document.getElementById('list-view').style.display='';
   document.getElementById('detail-view').style.display='none';
-  const{data:events}=await supabase.from('events').select('*').order('date');
+  const{data:events}=await sb.from('events').select('*').order('date');
   const by={pending:[],approved:[],past:[]};
   (events||[]).forEach(e=>{const k=e.status==='declined'||e.status==='completed'?'past':e.status;if(by[k])by[k].push(e);});
   const sc={pending:'pill-warn',approved:'pill-green',declined:'pill-danger',completed:'pill-gray'};
@@ -182,7 +182,7 @@ async function showDetail(id){
   document.getElementById('list-view').style.display='none';
   document.getElementById('detail-view').style.display='';
   document.getElementById('assign-wrap').style.display='none';
-  const{data:e}=await supabase.from('events').select('*').eq('id',id).single();
+  const{data:e}=await sb.from('events').select('*').eq('id',id).single();
   document.getElementById('det-name').textContent=e.name;
   document.getElementById('det-loc').textContent=e.date+' · '+e.location;
   document.getElementById('det-fields').innerHTML=[['Date',e.date],['Location',e.location],['Attendees',e.attendees||'–'],['Contact',e.contact_name||'–'],['Phone',e.contact_phone||'–'],['Notes',e.notes||'–']].map(([l,v])=>`<div class="row"><div class="row-body"><div class="row-sub">${l}</div><div class="row-title">${v}</div></div></div>`).join('');
@@ -192,13 +192,13 @@ async function showDetail(id){
   else{a.innerHTML=`<button class="btn btn-ghost" onclick="loadList()">&#8592; Back</button>`;}
 }
 
-async function setStatus(s){await supabase.from('events').update({status:s,updated_at:new Date().toISOString()}).eq('id',curId);toast('Event '+s,true);setTimeout(loadList,800);}
+async function setStatus(s){await sb.from('events').update({status:s,updated_at:new Date().toISOString()}).eq('id',curId);toast('Event '+s,true);setTimeout(loadList,800);}
 
 async function showAssign(){
   document.getElementById('assign-wrap').style.display='';
-  const{data:vols}=await supabase.from('volunteers').select('*').eq('active',true).eq('role','volunteer');
+  const{data:vols}=await sb.from('volunteers').select('*').eq('active',true).eq('role','volunteer');
   allVols=vols||[];
-  const{data:ex}=await supabase.from('event_assignments').select('volunteer_id').eq('event_id',curId);
+  const{data:ex}=await sb.from('event_assignments').select('volunteer_id').eq('event_id',curId);
   selVols=new Set((ex||[]).map(a=>a.volunteer_id));
   renderVols();
 }
@@ -208,8 +208,8 @@ function renderVols(){document.getElementById('vol-list').innerHTML=allVols.map(
 function toggleVol(id){if(selVols.has(id))selVols.delete(id);else selVols.add(id);renderVols();}
 
 async function confirmAssign(){
-  await supabase.from('event_assignments').delete().eq('event_id',curId);
-  if(selVols.size)await supabase.from('event_assignments').insert([...selVols].map(vid=>({event_id:curId,volunteer_id:vid,status:'assigned'})));
+  await sb.from('event_assignments').delete().eq('event_id',curId);
+  if(selVols.size)await sb.from('event_assignments').insert([...selVols].map(vid=>({event_id:curId,volunteer_id:vid,status:'assigned'})));
   toast(selVols.size+' volunteer(s) assigned',true);
   document.getElementById('assign-wrap').style.display='none';
 }

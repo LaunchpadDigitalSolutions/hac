@@ -145,22 +145,22 @@ input,select,textarea{font-family:inherit;font-size:16px}
   <a href="../uniform/index.html" class=""><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>Kit</a>
   <a href="../onboarding/index.html" class=""><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</a>
 </nav>
-<script>const supabase = window.supabase.createClient('https://zwndffsorkqsjykauepp.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp3bmRmZnNvcmtxc2p5a2F1ZXBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI1MzY4NDUsImV4cCI6MjA5ODExMjg0NX0.07KfE2A_sxEfGq1oPnEFvTihs0o54ZuTHG7DuMls7g0', {db:{schema:'hac'}});
+<script>const sb = window.supabase.createClient('https://zwndffsorkqsjykauepp.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp3bmRmZnNvcmtxc2p5a2F1ZXBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI1MzY4NDUsImV4cCI6MjA5ODExMjg0NX0.07KfE2A_sxEfGq1oPnEFvTihs0o54ZuTHG7DuMls7g0', {db:{schema:'hac'}});
 function fmtTime(d){if(!d)return'';return new Date(d).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});}
 function fmtDate(d){if(!d)return'';return new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});}
 function fmtDuration(s){if(!s)return'0:00';const m=Math.floor(s/60),r=s%60;return m+':'+(r<10?'0':'')+r;}
 function toast(msg,ok){const t=document.getElementById('toast');if(!t)return;t.textContent=msg;t.style.background=ok===false?'#B91C1C':'#1A1A1A';t.style.display='block';setTimeout(()=>t.style.display='none',3000);}
 (async()=>{
-  const{data:{user}}=await supabase.auth.getUser();
+  const{data:{user}}=await sb.auth.getUser();
   if(!user){window.location.href='login/index.html';return;}
-  const{data:vols}=await supabase.from('volunteers').select('id,name').eq('user_id',user.id).limit(1);
+  const{data:vols}=await sb.from('volunteers').select('id,name').eq('user_id',user.id).limit(1);
   const vol=vols&&vols[0];
   if(vol){const h=document.querySelector('.hac-header .sub');if(h)h.textContent=vol.name;}
   if(!vol){document.getElementById('next-shift').innerHTML='<div style="background:#f5f5f5;border-radius:12px;padding:16px;text-align:center;color:var(--muted);font-size:14px">No upcoming shifts</div>';return;}
-  const{data:asgn}=await supabase.from('event_assignments').select('event_id').eq('volunteer_id',vol.id);
+  const{data:asgn}=await sb.from('event_assignments').select('event_id').eq('volunteer_id',vol.id);
   const ids=(asgn||[]).map(a=>a.event_id);
   if(!ids.length){document.getElementById('next-shift').innerHTML='<div style="background:#f5f5f5;border-radius:12px;padding:16px;text-align:center;color:var(--muted);font-size:14px">No upcoming shifts</div>';return;}
-  const{data:events}=await supabase.from('events').select('*').in('id',ids).eq('status','approved').gte('date',new Date().toISOString().split('T')[0]).order('date').limit(1);
+  const{data:events}=await sb.from('events').select('*').in('id',ids).eq('status','approved').gte('date',new Date().toISOString().split('T')[0]).order('date').limit(1);
   const next=(events||[])[0];
   if(!next){document.getElementById('next-shift').innerHTML='<div style="background:#f5f5f5;border-radius:12px;padding:16px;text-align:center;color:var(--muted);font-size:14px">No upcoming shifts</div>';return;}
   document.getElementById('next-shift').innerHTML=`<div style="background:#2E7D52;border-radius:12px;overflow:hidden"><div style="padding:14px 16px"><div style="font-size:16px;font-weight:500;color:#fff">${next.name}</div><div style="font-size:13px;color:rgba(255,255,255,0.8);margin-top:4px">${next.date} &middot; ${next.location}</div></div></div>`;

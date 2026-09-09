@@ -144,7 +144,7 @@ input,select,textarea{font-family:inherit;font-size:16px}
 <script src="../../shared/auth.js"></script>
 <script>
 (async () => {
-  const { data: { user } } = await supabase.auth.getUser();
+  const { data: { user } } = await sb.auth.getUser();
   if (user) window.location.href = '../index.html';
 })();
 document.getElementById('login-form').addEventListener('submit', async e => {
@@ -154,7 +154,7 @@ document.getElementById('login-form').addEventListener('submit', async e => {
   btn.textContent = 'Signing in...'; btn.disabled = true; err.style.display = 'none';
   let email = document.getElementById('email').value;
   if (!email.includes('@')) email = email + '@hac.internal';
-  const { error } = await supabase.auth.signInWithPassword({email, password: document.getElementById('password').value});
+  const { error } = await sb.auth.signInWithPassword({email, password: document.getElementById('password').value});
   if (error) { err.textContent = 'Incorrect username or password.'; err.style.display='block'; btn.textContent='Sign in'; btn.disabled=false; }
   else window.location.href = '../index.html';
 });

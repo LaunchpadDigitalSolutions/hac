@@ -1,14 +1,14 @@
 const SUPA_URL = 'https://zwndffsorkqsjykauepp.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp3bmRmZnNvcmtxc2p5a2F1ZXBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI1MzY4NDUsImV4cCI6MjA5ODExMjg0NX0.07KfE2A_sxEfGq1oPnEFvTihs0o54ZuTHG7DuMls7g0';
 
-const supabase = window.supabase.createClient(SUPA_URL, SUPA_KEY, {
+const sb = window.supabase.createClient(SUPA_URL, SUPA_KEY, {
   db: { schema: 'hac' }
 });
 
 async function getProfile() {
-  const { data: { user } } = await supabase.auth.getUser();
+  const { data: { user } } = await sb.auth.getUser();
   if (!user) return null;
-  const { data } = await supabase.from('volunteers').select('*').eq('user_id', user.id).single();
+  const { data } = await sb.from('volunteers').select('*').eq('user_id', user.id).single();
   return data;
 }
 
@@ -25,7 +25,7 @@ async function requireVolunteer() {
 }
 
 async function hacSignOut(dest) {
-  await supabase.auth.signOut();
+  await sb.auth.signOut();
   window.location.href = dest || '/admin/login/';
 }
 

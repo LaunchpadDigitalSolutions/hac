@@ -154,9 +154,9 @@ input,select,textarea{font-family:inherit;font-size:16px}
   </div>
 </div>
 <div class="toast" id="toast"></div>
-<script>const supabase = window.supabase.createClient('https://zwndffsorkqsjykauepp.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp3bmRmZnNvcmtxc2p5a2F1ZXBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI1MzY4NDUsImV4cCI6MjA5ODExMjg0NX0.07KfE2A_sxEfGq1oPnEFvTihs0o54ZuTHG7DuMls7g0', {db:{schema:'hac'}});
+<script>const sb = window.supabase.createClient('https://zwndffsorkqsjykauepp.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp3bmRmZnNvcmtxc2p5a2F1ZXBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI1MzY4NDUsImV4cCI6MjA5ODExMjg0NX0.07KfE2A_sxEfGq1oPnEFvTihs0o54ZuTHG7DuMls7g0', {db:{schema:'hac'}});
 /* HAC_GUARD */
-(async()=>{const{data:{user}}=await supabase.auth.getUser();if(!user){window.location.replace('../login/index.html');return;}const{data:me}=await supabase.from('volunteers').select('role').eq('user_id',user.id).maybeSingle();if(!me||me.role!=='admin'){await supabase.auth.signOut();window.location.replace('../login/index.html');}})();
+(async()=>{const{data:{user}}=await sb.auth.getUser();if(!user){window.location.replace('../login/index.html');return;}const{data:me}=await sb.from('volunteers').select('role').eq('user_id',user.id).maybeSingle();if(!me||me.role!=='admin'){await sb.auth.signOut();window.location.replace('../login/index.html');}})();
 
 const HAC_WORKER='https://worker.hac.launchpadclient.app';
 function fmtTime(d){if(!d)return'';return new Date(d).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});}
@@ -164,7 +164,7 @@ function fmtDate(d){if(!d)return'';return new Date(d).toLocaleDateString('en-GB'
 function fmtDuration(s){if(!s)return'0:00';const m=Math.floor(s/60),r=s%60;return m+':'+(r<10?'0':'')+r;}
 function toast(msg,ok){const t=document.getElementById('toast');if(!t)return;t.textContent=msg;t.style.background=ok===false?'#B91C1C':'#1A1A1A';t.style.display='block';setTimeout(()=>t.style.display='none',3000);}
 async function loadVols(){
-  const{data:vols}=await supabase.from('volunteers').select('*').order('name');
+  const{data:vols}=await sb.from('volunteers').select('*').order('name');
   const list=vols||[];
   document.getElementById('vol-count').textContent=list.length+' volunteers';
   document.getElementById('vol-list').innerHTML=list.length?list.map(v=>`<div class="row"><div class="row-icon" style="background:${v.active?'var(--gl)':'#F5F5F5'}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${v.active?'#2E7D52':'#9CA3AF'}" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="row-body"><div class="row-title">${v.name} ${v.role==='admin'?'<span class="pill pill-blue" style="font-size:10px">Admin</span>':''}</div><div class="row-sub">${v.qualification||'Volunteer'} &middot; ${v.phone||'No phone'}</div></div><span class="pill ${v.active?'pill-green':'pill-gray'}">${v.active?'Active':'Inactive'}</span></div>`).join(''):'<div class="empty">No volunteers yet</div>';
@@ -177,7 +177,7 @@ async function addVol(){
   const pass=document.getElementById('new-pass').value.trim();
   if(!name||!user||!pass){toast('Fill all fields',false);return;}
   if(pass.length<8){toast('Password must be at least 8 characters',false);return;}
-  const{data:{session}}=await supabase.auth.getSession();
+  const{data:{session}}=await sb.auth.getSession();
   if(!session){toast('Session expired — sign in again',false);return;}
   const r=await fetch(HAC_WORKER+'/api/users',{
     method:'POST',
