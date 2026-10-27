@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>HAC policy answers</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+:root{--bg:#f6f6f4;--card:#fff;--text:#1a1a18;--sub:#5f5e5a;--mut:#8a8984;--line:#e1dfd8;--acc:#185fa5;--accbg:#e6f1fb;--ok:#3b6d11;--warn:#854f0b;--err:#a32d2d;--errbg:#fcebeb;--green:#2e7d52;--yellow:#f5cb00;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1b1b19;--card:#262624;--text:#f1efe8;--sub:#b4b2a9;--mut:#888780;--line:#3a3a37;--acc:#85b7eb;--accbg:#0c447c;--ok:#97c459;--warn:#fac775;--err:#f09595;--errbg:#501313}}
+:root[data-theme="dark"]{--bg:#1b1b19;--card:#262624;--text:#f1efe8;--sub:#b4b2a9;--mut:#888780;--line:#3a3a37;--acc:#85b7eb;--accbg:#0c447c;--ok:#97c459;--warn:#fac775;--err:#f09595;--errbg:#501313}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:16px;line-height:1.5;overscroll-behavior:none;overflow-x:hidden;padding-bottom:76px}
+.band{height:14px;background-image:conic-gradient(var(--green) 90deg,var(--yellow) 90deg 180deg,var(--green) 180deg 270deg,var(--yellow) 270deg);background-size:14px 14px}
+.top{padding:12px 16px;background:var(--card);border-bottom:1px solid var(--line)}
+.top h1{font-size:18px;margin:0;font-weight:600}
+.row1{display:flex;justify-content:space-between;align-items:baseline}
+.cnt{font-size:14px;color:var(--sub)}
+.bar{height:6px;background:var(--line);border-radius:3px;margin-top:8px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--green);width:0;transition:width .2s}
+.sync{font-size:12px;color:var(--mut);margin-top:6px}
+.banner{background:var(--errbg);color:var(--err);font-size:14px;padding:12px 16px;display:none}
+.banner a{color:inherit;text-decoration:underline}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:10px 16px;background:var(--card);border-bottom:1px solid var(--line);-webkit-overflow-scrolling:touch}
+.chip{flex:none;min-height:44px;padding:0 14px;border-radius:22px;font-size:14px;border:1px solid var(--line);background:transparent;color:var(--sub);font-family:inherit;cursor:pointer}
+.chip.on{background:var(--accbg);color:var(--acc);border-color:var(--acc)}
+.q{padding:14px 16px;border-bottom:1px solid var(--line);background:var(--card)}
+.q label{display:block;font-size:14px;margin-bottom:6px}
+.q input,.q textarea{width:100%;min-height:44px;font-size:16px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--text);font-family:inherit}
+.q input:focus,.q textarea:focus{outline:2px solid var(--acc);outline-offset:0}
+.acts{display:flex;gap:8px;margin-top:8px;align-items:center;flex-wrap:wrap}
+.btn{min-height:44px;padding:0 14px;font-size:14px;border:1px solid var(--line);border-radius:8px;background:transparent;color:var(--text);font-family:inherit;cursor:pointer}
+.btn:active{transform:scale(.98)}
+.st{font-size:12px;margin-left:auto}
+.s-ok{color:var(--ok)}.s-un{color:var(--warn)}.s-na,.s-none{color:var(--mut)}
+.hint{font-size:13px;color:var(--mut);padding:10px 16px}
+.pad{padding:16px}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px}
+.stat span{font-size:13px;color:var(--sub);display:block}
+.stat b{font-size:24px;font-weight:600}
+.li{font-size:14px;padding:10px 0;border-top:1px solid var(--line)}
+textarea.out{width:100%;min-height:240px;font-size:14px;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--text);font-family:ui-monospace,Menlo,monospace}
+.nav{position:fixed;left:0;right:0;bottom:0;height:60px;display:flex;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);z-index:100;box-sizing:content-box}
+.nav button{flex:1;border:0;background:transparent;color:var(--sub);font-size:12px;font-family:inherit;min-height:48px;cursor:pointer}
+.nav button.on{color:var(--acc);font-weight:600}
+@media (min-width:768px){body{max-width:640px;margin:0 auto;border-left:1px solid var(--line);border-right:1px solid var(--line);padding-bottom:76px}.nav{max-width:640px;left:50%;right:auto;width:640px;transform:translateX(-50%)}}
+</style>
+</head>
+<body>
+<div class="band"></div>
+<div id="login" class="pad" style="display:none;max-width:420px;margin:0 auto"><h1 style="font-size:20px;margin:24px 0 4px">HAC policy answers</h1><p style="font-size:14px;color:var(--sub);margin:0 0 16px">Sign in with your Launchpad admin account.</p><div class="q" style="border:1px solid var(--line);border-radius:10px"><label for="em">Email</label><input type="email" id="em" autocomplete="username"><label for="pw" style="margin-top:12px">Password</label><input type="password" id="pw" autocomplete="current-password"><div class="acts"><button class="btn" id="go" style="width:100%;background:var(--accbg);color:var(--acc);border-color:var(--acc)">Sign in</button></div><p id="lerr" style="font-size:13px;color:var(--err);margin:8px 0 0"></p></div></div>
+<div id="app" style="display:none">
+<div class="top"><div class="row1"><h1>HAC policy answers</h1><span class="cnt" id="cnt"></span></div><div class="bar"><i id="fill"></i></div><div class="sync" id="sync">Connecting…</div></div>
+<div class="banner" id="err"></div>
+<div id="view"></div>
+</div>
+<div class="nav" id="nav" style="display:none"><button data-v="q" class="on">Questions</button><button data-v="p">Progress</button><button data-v="e">Export</button></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+var S=[
+["Governance",[["gov_body","Governing body name (e.g. Board of Trustees)","text"],["audit_lead","Audit lead","text"],["hr_lead","HR lead","text"],["deputy_rp","Deputy responsible person","text"]]],
+["IT and records",[["it_support","IT support contact (name and number)","text"],["records_system","Clinical records system and where it’s stored","area"],["doc_storage","Where documents are stored","text"]]],
+["Premises and fire",[["premises","Premises name and address","area"],["fire_wardens","Fire wardens: names and base","area"],["assembly_point","Assembly point","text"],["fire_plan_posted","Where the fire plan is posted","text"]]],
+["Suppliers",[["waste_contractor","Clinical waste and sharps contractor","text"],["waste_phone","Contractor phone","tel"],["waste_licence","Waste licence number","text"],["waste_frequency","Collection frequency","text"],["waste_review","Contract review date","date"],["oxygen_supplier","Oxygen supplier","text"],["oxygen_phone","Oxygen emergency number","tel"],["other_suppliers","Other key suppliers","area"]]],
+["Continuity",[["key_people","Key people to contact in an incident","area"],["backup_plan","Backup plan: premises, vehicle, IT","area"]]],
+["Clinical and ops",[["escalation2","Second escalation contact","text"],["chaperone_phone","Chaperone queries phone","tel"],["retention","Records retention period","text"],["induction_len","Volunteer induction length","text"]]],
+["Safeguarding",[["mash","Children’s safeguarding (MASH) contact","text"],["early_help","Early help contact","text"],["lado","LADO number","tel"],["partnership","Safeguarding partnership name","text"],["adults_sg","Adults safeguarding contact","text"],["police","Police force","text"],["nhs_trust","NHS trust","text"],["imca","IMCA provider","text"],["marac","MARAC contact","text"]]],
+["CQC",[["cqc_provider","CQC provider ID (after registration)","text"],["cqc_location","CQC location ID (after registration)","text"]]]
+];
+var A={},cur=0,view="q",db=null,pending={};
+var SB_URL="https://coiwwbroycaznkmhevde.supabase.co",SB_KEY="sb_publishable_vSbKXNXgF_SOXamfXHIWyg_qFDPXgWb",TBL="hac_form_answers";
+var $=function(i){return document.getElementById(i)};
+function all(){var o=[];S.forEach(function(s){s[1].forEach(function(q){o.push({sec:s[0],k:q[0],q:q[1]})})});return o}
+function total(){return all().length}
+function done(){return all().filter(function(x){return A[x.k]&&A[x.k].s}).length}
+function esc(t){return String(t==null?"":t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;")}
+function lab(s){return s==="ok"?"Saved":s==="un"?"Ask again later":s==="na"?"Not applicable":"Not answered"}
+function showErr(msg){var e=$("err");e.innerHTML=msg;e.style.display=msg?"block":"none"}
+function head(){var d=done(),t=total();$("cnt").textContent=d+" of "+t+" done";$("fill").style.width=Math.round(d/t*100)+"%"}
+function stamp(){$("sync").textContent=db?"Saved to database. Last updated "+new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"}):"Offline: answers can’t be saved right now"}
+function write(k,q,sec,v,st){
+if(!db){showErr("LP-411: Couldn’t reach the database. Your text is kept on this screen. <a href='#' onclick='location.reload();return false'>Reload</a>");return}
+var p=st?db.from(TBL).upsert({k:k,section:sec,question:q,value:v,status:st,updated_at:new Date().toISOString()}):db.from(TBL).delete().eq("k",k);
+pending[k]=1;
+p.then(function(r){if(r&&r.error)throw r.error;delete pending[k];showErr("");stamp()}).catch(function(e){showErr("LP-410: Couldn’t save “"+esc(q)+"”. Check your connection. Your text is kept on this screen. <a href='#' id='retry'>Retry</a>");var r=$("retry");if(r)r.onclick=function(ev){ev.preventDefault();write(k,q,sec,v,st)}})}
+function setStatus(k){var el=$("st-"+k);if(el){var s=A[k]?A[k].s:"";el.className="st s-"+(s||"none");el.textContent=lab(s)}}
+function qHtml(sec,x){var a=A[x[0]]||{v:"",s:""};var inp=x[2]==="area"?'<textarea rows="3" id="in-'+x[0]+'" data-k="'+x[0]+'">'+esc(a.v)+'</textarea>':'<input type="'+x[2]+'" id="in-'+x[0]+'" data-k="'+x[0]+'" value="'+esc(a.v)+'">';
+return '<div class="q"><label for="in-'+x[0]+'">'+x[1]+'</label>'+inp+'<div class="acts"><button class="btn" data-u="'+x[0]+'">Don’t know yet</button><button class="btn" data-n="'+x[0]+'">Not applicable</button><span class="st s-'+(a.s||"none")+'" id="st-'+x[0]+'">'+lab(a.s)+'</span></div></div>'}
+function find(k){var r=null;all().forEach(function(x){if(x.k===k)r=x});return r}
+function renderQ(){var h='<div class="chips">';S.forEach(function(s,i){var c=0;s[1].forEach(function(q){if(A[q[0]]&&A[q[0]].s)c++});h+='<button class="chip'+(i===cur?" on":"")+'" data-s="'+i+'">'+s[0]+" "+c+"/"+s[1].length+"</button>"});h+="</div>";
+S[cur][1].forEach(function(q){h+=qHtml(S[cur][0],q)});
+if(cur===6)h+='<p class="hint">These are local Hartlepool contacts. Confirm each one with Jason, or ask Claude to pre-fill them from public sources for you to check.</p>';
+if(cur===7)h+='<p class="hint">Blocked until CQC registration comes through. Leave these for now.</p>';
+$("view").innerHTML=h;
+document.querySelectorAll("[data-s]").forEach(function(b){b.onclick=function(){cur=+b.dataset.s;renderQ()}});
+document.querySelectorAll("[data-k]").forEach(function(i){i.onchange=function(){var x=find(i.dataset.k),val=i.value.trim();if(val){A[x.k]={v:val,s:"ok"};write(x.k,x.q,x.sec,val,"ok")}else{delete A[x.k];write(x.k,x.q,x.sec,"",null)}setStatus(x.k);head();chipCounts()}});
+document.querySelectorAll("[data-u]").forEach(function(b){b.onclick=function(){var x=find(b.dataset.u);A[x.k]={v:"",s:"un"};$("in-"+x.k).value="";write(x.k,x.q,x.sec,"","un");setStatus(x.k);head();chipCounts()}});
+document.querySelectorAll("[data-n]").forEach(function(b){b.onclick=function(){var x=find(b.dataset.n);A[x.k]={v:"",s:"na"};$("in-"+x.k).value="";write(x.k,x.q,x.sec,"","na");setStatus(x.k);head();chipCounts()}})}
+function chipCounts(){document.querySelectorAll("[data-s]").forEach(function(b){var i=+b.dataset.s,c=0;S[i][1].forEach(function(q){if(A[q[0]]&&A[q[0]].s)c++});b.textContent=S[i][0]+" "+c+"/"+S[i][1].length})}
+function renderP(){var ok=0,un=0,na=0;all().forEach(function(x){var s=A[x.k]&&A[x.k].s;if(s==="ok")ok++;if(s==="un")un++;if(s==="na")na++});
+var h='<div class="pad"><div class="stats"><div class="stat"><span>Answered</span><b>'+ok+'</b></div><div class="stat"><span>Ask again</span><b>'+un+'</b></div><div class="stat"><span>Not applicable</span><b>'+na+'</b></div><div class="stat"><span>Left</span><b>'+(total()-ok-un-na)+'</b></div></div><p style="font-size:14px;color:var(--sub);margin:16px 0 4px">Marked ask again</p>';
+var any=0;all().forEach(function(x){if(A[x.k]&&A[x.k].s==="un"){any=1;h+='<div class="li">'+esc(x.q)+'</div>'}});
+if(!any)h+='<p class="hint" style="padding:8px 0">Nothing waiting. Tap “Don’t know yet” on a question and it shows here.</p>';
+h+="</div>";$("view").innerHTML=h}
+function renderE(){var t=[];all().forEach(function(x){var a=A[x.k];if(a&&a.s)t.push(x.sec+" | "+x.q+": "+(a.s==="ok"?a.v:a.s==="un"?"(ask again)":"(not applicable)"))});
+$("view").innerHTML='<div class="pad"><p style="font-size:14px;color:var(--sub);margin:0 0 12px">Answers are saved to the database as you type. Claude reads them from there, so there’s nothing to copy across. This text is a backup.</p><textarea class="out" id="out" readonly>'+esc(t.join("\n"))+'</textarea><div class="acts"><button class="btn" id="cp">Copy answers as text</button></div></div>';
+$("cp").onclick=function(){var o=$("out");o.select();try{document.execCommand("copy")}catch(e){}}}
+function render(){head();if(view==="q")renderQ();if(view==="p")renderP();if(view==="e")renderE()}
+document.querySelectorAll(".nav button").forEach(function(b){b.onclick=function(){view=b.dataset.v;document.querySelectorAll(".nav button").forEach(function(x){x.classList.toggle("on",x===b)});render()}});
+function onRows(rows){A={};rows.forEach(function(d){if(d.status)A[d.k]={v:d.value||"",s:d.status}});
+head();stamp();
+if(view==="q"){var f=document.activeElement;var typing=f&&f.dataset&&f.dataset.k;
+all().forEach(function(x){if(x.k===typing)return;var el=$("in-"+x.k);if(el&&el.value!==((A[x.k]&&A[x.k].v)||""))el.value=(A[x.k]&&A[x.k].v)||"";setStatus(x.k)});chipCounts()}
+else render()}
+render();
+function loadRows(){db.from(TBL).select("k,value,status").then(function(r){if(r.error){showErr("LP-412: Couldn’t load saved answers. Reload the page.");return}onRows(r.data||[])})}
+function showApp(on){$("login").style.display=on?"none":"block";$("app").style.display=on?"block":"none";$("nav").style.display=on?"flex":"none";document.querySelector(".top").style.display=on?"block":"none"}
+function boot(){try{db=supabase.createClient(SB_URL,SB_KEY)}catch(e){showApp(false);$("lerr").textContent="LP-411: Couldn’t load the database library. Reload the page.";return}
+showApp(false);
+db.auth.getSession().then(function(r){if(r.data&&r.data.session){showApp(true);loadRows()}})
+$("go").onclick=function(){$("lerr").textContent="";var em=$("em").value.trim(),pw=$("pw").value;if(!em||!pw){$("lerr").textContent="Enter your email and password.";return}
+db.auth.signInWithPassword({email:em,password:pw}).then(function(r){if(r.error){$("lerr").textContent="LP-001: Sign in failed. Check your email and password.";return}showApp(true);loadRows()})};
+document.addEventListener("visibilitychange",function(){if(!document.hidden&&$("app").style.display==="block")loadRows()})}
+boot();
+</script>
+</body>
+</html>
