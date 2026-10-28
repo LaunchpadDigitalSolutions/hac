@@ -60,13 +60,15 @@ textarea.out{width:100%;min-height:240px;font-size:14px;padding:10px;border:1px 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script>
 var S=[
-["Governance",[["gov_body","Governing body name (e.g. Board of Trustees)","text"],["audit_lead","Audit lead","text"],["hr_lead","HR lead","text"],["deputy_rp","Deputy responsible person","text"]]],
-["IT and records",[["it_support","IT support contact (name and number)","text"],["records_system","Clinical records system and where it’s stored","area"],["doc_storage","Where documents are stored","text"]]],
+["Governance",[["gov_body","Governing body name (e.g. Board of Trustees)","text"],["audit_lead","Audit lead","text"],["hr_lead","HR lead","text"],["deputy_rp","Deputy responsible person","text"],["finance_lead","Finance lead (treasurer or similar)","text"],["approving_auth","Who approves policies and documents (person or body)","text"]]],
+["Governance meetings",[["gov_freq","How often does the governing body meet (e.g. quarterly)","text"],["gov_venue","Usual venue or online platform for meetings","text"],["gov_year_end","Financial or governance year end (e.g. 31 March)","text"],["departments","Teams or departments within HAC, if any","area"]]],
+["Services and area",[["svc_list","Services HAC provides (list each one)","area"],["svc_speciality","Type of service or clinical speciality (e.g. event first aid cover)","text"],["svc_area","Area covered (Hartlepool only, or wider e.g. Tees Valley)","text"],["svc_population","Who you care for (e.g. event attendees, schools, general public, children)","area"],["svc_address","Service address if different from the registered address","area"],["receiving_hospital","Usual receiving hospital or hospitals","text"],["legislation","Any other legislation or standards that apply to HAC besides CQC","area"]]],
+["IT and records",[["it_support","IT support contact (name and number)","text"],["records_system","Clinical records system and where it’s stored","area"],["doc_storage","Where documents are stored","text"],["systems_used","Other systems or platforms used (rota, booking, messaging, video calls)","area"]]],
 ["Premises and fire",[["premises","Premises name and address","area"],["fire_wardens","Fire wardens: names and base","area"],["assembly_point","Assembly point","text"],["fire_plan_posted","Where the fire plan is posted","text"]]],
 ["Suppliers",[["waste_contractor","Clinical waste and sharps contractor","text"],["waste_phone","Contractor phone","tel"],["waste_licence","Waste licence number","text"],["waste_frequency","Collection frequency","text"],["waste_review","Contract review date","date"],["oxygen_supplier","Oxygen supplier","text"],["oxygen_phone","Oxygen emergency number","tel"],["other_suppliers","Other key suppliers","area"]]],
 ["Continuity",[["key_people","Key people to contact in an incident","area"],["backup_plan","Backup plan: premises, vehicle, IT","area"]]],
 ["Clinical and ops",[["escalation2","Second escalation contact","text"],["chaperone_phone","Chaperone queries phone","tel"],["retention","Records retention period","text"],["induction_len","Volunteer induction length","text"]]],
-["Safeguarding",[["mash","Children’s safeguarding (MASH) contact","text"],["early_help","Early help contact","text"],["lado","LADO number","tel"],["partnership","Safeguarding partnership name","text"],["adults_sg","Adults safeguarding contact","text"],["police","Police force","text"],["nhs_trust","NHS trust","text"],["imca","IMCA provider","text"],["marac","MARAC contact","text"]]],
+["Safeguarding",[["mash","Children’s safeguarding (MASH) contact","text"],["early_help","Early help contact","text"],["lado","LADO number","tel"],["partnership","Safeguarding partnership name","text"],["adults_sg","Adults safeguarding contact","text"],["police","Police force","text"],["nhs_trust","NHS trust","text"],["icb_contact","Integrated care board (ICB) contact email","text"],["imca","IMCA provider","text"],["marac","MARAC contact","text"]]],
 ["CQC",[["cqc_provider","CQC provider ID (after registration)","text"],["cqc_location","CQC location ID (after registration)","text"]]]
 ];
 var A={},cur=0,view="q",db=null,pending={};
@@ -91,8 +93,8 @@ return '<div class="q"><label for="in-'+x[0]+'">'+x[1]+'</label>'+inp+'<div clas
 function find(k){var r=null;all().forEach(function(x){if(x.k===k)r=x});return r}
 function renderQ(){var h='<div class="chips">';S.forEach(function(s,i){var c=0;s[1].forEach(function(q){if(A[q[0]]&&A[q[0]].s)c++});h+='<button class="chip'+(i===cur?" on":"")+'" data-s="'+i+'">'+s[0]+" "+c+"/"+s[1].length+"</button>"});h+="</div>";
 S[cur][1].forEach(function(q){h+=qHtml(S[cur][0],q)});
-if(cur===6)h+='<p class="hint">These are local Hartlepool contacts. Confirm each one with Jason, or ask Claude to pre-fill them from public sources for you to check.</p>';
-if(cur===7)h+='<p class="hint">Blocked until CQC registration comes through. Leave these for now.</p>';
+if(S[cur][0]==="Safeguarding")h+='<p class="hint">These are local Hartlepool contacts. Confirm each one with Jason, or ask Claude to pre-fill them from public sources for you to check.</p>';
+if(S[cur][0]==="CQC")h+='<p class="hint">Blocked until CQC registration comes through. Leave these for now.</p>';
 $("view").innerHTML=h;
 document.querySelectorAll("[data-s]").forEach(function(b){b.onclick=function(){cur=+b.dataset.s;renderQ()}});
 document.querySelectorAll("[data-k]").forEach(function(i){i.onchange=function(){var x=find(i.dataset.k),val=i.value.trim();if(val){A[x.k]={v:val,s:"ok"};write(x.k,x.q,x.sec,val,"ok")}else{delete A[x.k];write(x.k,x.q,x.sec,"",null)}setStatus(x.k);head();chipCounts()}});
